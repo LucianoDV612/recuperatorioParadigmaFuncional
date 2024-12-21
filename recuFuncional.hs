@@ -83,6 +83,6 @@ punto4 unAventurero (unPersonaje : siguientesPersonajes)
     | otherwise = []
 
 
-pepe :: Aventurero
-pepe = UnAventurero "Pepe" 50 6 False valiente
+--pepe :: Aventurero
+--pepe = UnAventurero "Pepe" 50 6 False valiente
 
