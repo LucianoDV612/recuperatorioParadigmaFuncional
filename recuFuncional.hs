@@ -57,12 +57,10 @@ listaDeCargasPares unListaDeAventureros = map carga . filter (even . carga) $ un
 ------------punto3--------------
 
 type Personaje = Aventurero -> Aventurero
-type Encuentro = Aventurero -> Personaje -> Aventurero
-
 
 -- Aventurero -> (Aventurero -> Aventurero) -> Aventurero
-encuentroConPersonaje :: Encuentro
-encuentroConPersonaje unAventurero unPersonaje = unPersonaje . modCarga (subtract 1) $ unAventurero
+encuentroConPersonaje :: Aventurero -> Aventurero
+encuentroConPersonaje unAventurero  = modCarga (subtract 1)  unAventurero
 
 curandero :: Personaje
 curandero unAventurero = modCarga (div 2) . modSalud (*1.2) $ unAventurero
@@ -70,14 +68,21 @@ curandero unAventurero = modCarga (div 2) . modSalud (*1.2) $ unAventurero
 inspirador :: Personaje
 inspirador unAventurero = modCoraje (const True) . modSalud (*1.1) $ unAventurero
 
-enbaucador :: Personaje
-enbaucador unAventurero = modCoraje (const False) . modCarga (+ 10) . modSalud (*0.5) . modCriterioDeSeleccionDeEncuentro (const.lightPacker $ 10) $ unAventurero
+embaucador :: Personaje
+embaucador unAventurero = modCoraje (const False) . modCarga (+ 10) . modSalud (*0.5) . modCriterioDeSeleccionDeEncuentro (const.lightPacker $ 10) $ unAventurero
 
 -------------punto4--------------
 
-aCualesEncuentrosSeEnfrentaria :: [Encuentro] -> Aventurero -> [Encuentro]
-aCualesEncuentrosSeEnfrentaria [] _ = []
-aCualesEncuentrosSeEnfrentaria (unEncuentro:unListaDeEncuentros) unAventurero = unEncuentro unAventurero : aCualesEncuentrosSeEnfrentaria unListaDeEncuentros unAventurero
+puedeRealizarEncuentro :: Aventurero -> Personaje -> Bool
+puedeRealizarEncuentro unAventurero unPersonaje = criterioDeSeleccionDeEncuentro unAventurero (unPersonaje unAventurero)
+
+punto4 :: Aventurero -> [Personaje] -> [Personaje]
+punto4 _ [] = [] 
+punto4 unAventurero (unPersonaje : siguientesPersonajes) 
+    | criterioDeSeleccionDeEncuentro unAventurero (unPersonaje unAventurero) = unPersonaje : punto4 unAventurero siguientesPersonajes
+    | otherwise = []
 
 
---aCualesEncuentrosSeEnfrentaria (unEncuentro:unListaDeEncuentros) unAventurero = unEncuentro : aCualesEncuentrosSeEnfrentaria unListaDeEncuentros unAventurero
+pepe :: Aventurero
+pepe = UnAventurero "Pepe" 50 6 False valiente
+
