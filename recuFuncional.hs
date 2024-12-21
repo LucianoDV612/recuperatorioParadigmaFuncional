@@ -28,7 +28,7 @@ modCoraje unaFuncion unAventurero = unAventurero { conservaElCoraje = unaFuncion
 type Criterio = Aventurero -> Bool
 
 conformista :: Criterio
-conformista unAventurero = True 
+conformista _ = True 
 
 valiente :: Criterio
 valiente unAventurero = conservaElCoraje unAventurero || salud unAventurero > 50
@@ -58,7 +58,6 @@ listaDeCargasPares unListaDeAventureros = map carga . filter (even . carga) $ un
 
 type Personaje = Aventurero -> Aventurero
 
--- Aventurero -> (Aventurero -> Aventurero) -> Aventurero
 encuentroConPersonaje :: Aventurero -> Aventurero
 encuentroConPersonaje unAventurero  = modCarga (subtract 1)  unAventurero
 
@@ -76,11 +75,11 @@ embaucador unAventurero = modCoraje (const False) . modCarga (+ 10) . modSalud (
 puedeRealizarEncuentro :: Aventurero -> Personaje -> Bool
 puedeRealizarEncuentro unAventurero unPersonaje = criterioDeSeleccionDeEncuentro unAventurero (unPersonaje unAventurero)
 
-punto4 :: Aventurero -> [Personaje] -> [Personaje]
-punto4 _ [] = [] 
-punto4 unAventurero (unPersonaje : siguientesPersonajes) 
-    | criterioDeSeleccionDeEncuentro unAventurero (unPersonaje unAventurero) = unPersonaje : punto4 unAventurero siguientesPersonajes
-    | otherwise = []
+aQueSeEnfrentaria :: Aventurero -> [Personaje] -> [Personaje]
+aQueSeEnfrentaria _ [] = []
+aQueSeEnfrentaria unAventurero (unPersonaje : siguientesPersonajes) 
+    | criterioDeSeleccionDeEncuentro unAventurero (unPersonaje unAventurero) = unPersonaje : aQueSeEnfrentaria unAventurero siguientesPersonajes
+    | otherwise = [unPersonaje]
 
 
 --pepe :: Aventurero
