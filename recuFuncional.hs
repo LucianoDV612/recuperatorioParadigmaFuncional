@@ -62,13 +62,13 @@ encuentroConPersonaje :: Aventurero -> Aventurero
 encuentroConPersonaje unAventurero  = modCarga (subtract 1)  unAventurero
 
 curandero :: Personaje
-curandero unAventurero = modCarga (div 2) . modSalud (*1.2) $ unAventurero
+curandero unAventurero = modCarga (div 2) . modSalud (*1.2) . encuentroConPersonaje $ unAventurero
 
 inspirador :: Personaje
-inspirador unAventurero = modCoraje (const True) . modSalud (*1.1) $ unAventurero
+inspirador unAventurero = modCoraje (const True) . modSalud (*1.1) . encuentroConPersonaje $ unAventurero
 
 embaucador :: Personaje
-embaucador unAventurero = modCoraje (const False) . modCarga (+ 10) . modSalud (*0.5) . modCriterioDeSeleccionDeEncuentro (const.lightPacker $ 10) $ unAventurero
+embaucador unAventurero = modCoraje (const False) . modCarga (+ 10) . modSalud (*0.5) . modCriterioDeSeleccionDeEncuentro (const.lightPacker $ 10) . encuentroConPersonaje $ unAventurero
 
 -------------punto4--------------
 
